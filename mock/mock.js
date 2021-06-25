@@ -1,28 +1,17 @@
 const Mock = require('mockjs');
-const _lodash = require('lodash');
-
-const { get } = _lodash;
+const { get } = require('lodash');
 const { resolve } = require('path');
-const TJS = require('typescript-json-schema');
 
-const settings = {
-  required: true,
+const tsj = require('ts-json-schema-generator');
+
+const config = {
+  path: resolve(process.cwd(), './mock/data-source.d.ts'),
+  tsconfig: resolve(process.cwd(), './tsconfig.json'),
+  type: '*',
 };
-const compilerOptions = {
-  strictNullChecks: true,
-  ignoreErrors: true,
-};
 
-const basePath = './';
+const shapeSchema = tsj.createGenerator(config).createSchema(config.type);
 
-const program = TJS.getProgramFromFiles(
-  ['./mock-test/data-source.d.ts'],
-  // ['./mock-test/data-source.ts'],
-  compilerOptions,
-  basePath,
-);
-
-const shapeSchema = TJS.generateSchema(program, '*', settings);
 console.log(JSON.stringify(shapeSchema));
 
 const { Random } = Mock;
